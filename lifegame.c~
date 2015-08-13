@@ -1,0 +1,257 @@
+//lifegame.c
+//This will house the functions necessary for playing Conway's Game of Life.
+//Author:  Christopher Ray		//Date:  29 October 2013
+
+#include <stdio.h>
+#include "lifegame.h"
+
+void setup_board(char board[BOARD_SIZE][BOARD_SIZE])
+{
+	int i = 0;
+	int j = 0;
+	
+	for(i = 0; i < BOARD_SIZE; i++)
+	{
+		for(j = 0; j < BOARD_SIZE; j++)
+		{
+			board[i][j] = ' ';
+		}
+	}
+}
+
+void print_board(char board[BOARD_SIZE][BOARD_SIZE])
+{
+	int i = 0;
+	int j = 0;
+
+	for (i = 0; i < BOARD_SIZE; i++)
+	{
+		for (j = 0; j < BOARD_SIZE; j++)
+		{
+			printf("%c ", board[i][j]);
+		}
+	}
+	return;
+}
+
+void add_cell(char board[BOARD_SIZE][BOARD_SIZE], int row, int column)
+{
+	if(board[row][column] == 'X')
+	{
+		return;
+	}
+	else
+	{
+		board[row][column] = 'X';
+		return;
+	}
+}
+
+void delete_cell(char board[BOARD_SIZE][BOARD_SIZE], int row, int column)
+{
+	if(board[row][column] == ' ')
+	{
+		return;
+	}
+	else
+	{
+		board[row][column] = ' ';
+		return;
+	}
+}
+
+void change_board(char current_board[BOARD_SIZE][BOARD_SIZE], char future_board[BOARD_SIZE][BOARD_SIZE])
+{
+	current_board = future_board;
+	return;
+}
+
+int check_neighbors(char board[BOARD_SIZE][BOARD_SIZE], int row, int column)
+{
+	int cells = 0;
+
+	if(((column == 0) && (row == 0)))
+	{
+		if(board[0][1] == 'X') cells++;
+		
+		else if(board[1][0] == 'X') cells++;
+                
+		else if(board[1][1] == 'X') cells++;
+                
+	}
+	else if(((column == 39) && (row == 0)))                
+        {
+                if(board[0][38] == 'X') cells++;
+                
+                else if(board[1][39] == 'X') cells++;
+                
+                else if(board[1][37] == 'X') cells++;
+               
+        }
+	else if(((column == 39) && (row == 0)))    
+        {
+                if(board[0][38] == 'X') cells++;
+                
+                else if(board[1][39] == 'X') cells++;
+                
+                else if(board[1][38] == 'X') cells++;
+          
+        }
+	else if(((column == 0) && (row == 39)))
+        {
+                if(board[38][0] == 'X') cells++;
+                
+                else if(board[39][1] == 'X') cells++;
+                
+                else if(board[38][1] == 'X') cells++;
+                
+        }
+	else if(((column == 39) && (row == 39)))
+        {
+                if(board[39][38] == 'X') cells++;
+                
+                else if(board[38][38] == 'X') cells++;
+                
+                else if(board[38][39] == 'X') cells++;
+                
+        }
+	else if(row == 0)
+	{
+		int x = 0;
+		if(board[row][column - 1] == 'X') cells++;
+		
+		else if(board[row][column + 1] == 'X') cells++;
+                
+		for(x = -1; x < 2; x++)
+		{
+			if(board[row + 1][column + x] == 'X') cells++;
+		}
+	}
+	else if(row == 39)
+        {
+                int x = 0;
+                if(board[row][column - 1] == 'X') cells++;
+                
+                else if(board[row][column + 1] == 'X') cells++;
+                
+                for(x =	-1; x <	2; x++)
+                {
+                        if(board[row - 1][column + x] == 'X') cells++;
+                }
+        }
+	else if(column == 0)
+        {
+                int x = 0;
+                if(board[row - 1][column] == 'X') cells++;
+               
+                else if(board[row + 1][column] == 'X') cells++;
+                
+                for(x =	-1; x <	2; x++)
+                {
+                        if(board[row + x][column + 1] == 'X') cells++;
+                }
+        }
+	else if(column == 39)
+        {
+                int x = 0;
+                if(board[row - 1][column] == 'X') cells++;
+            
+                else if(board[row + 1][column] == 'X') cells++;
+                
+                for(x = -1; x < 2; x++)
+                {
+                        if(board[row + x][column - 1] == 'X') cells++;
+                }
+        }
+	else
+	{
+		int x = 0;
+		if(board[row][column - 1] == 'X') cells++;
+		if(board[row][column + 1] == 'X') cells++;
+		for(x = -1; x < 2; x++)
+		{
+			if(board[row - 1][column + x] == 'X') cells++;
+			if(board[row + 1][column + x] == 'X') cells++;
+		}
+	}
+	return cells;
+}
+
+void life_or_death(char board[BOARD_SIZE][BOARD_SIZE], int row, int column, int cells)
+{
+	if ((board[row][column] == ' ') && (cells == 3)) board[row][column] = 'X';
+	else if ((board[row][column] == 'X') && ((cells == 2) || (cells == 3))) return;
+	else board[row][column] = ' ';
+	return;
+}
+
+void player_choice(char current_board[BOARD_SIZE][BOARD_SIZE], char future_board[BOARD_SIZE][BOARD_SIZE], char player)
+{
+	int row = 0;
+	int column = 0;
+	int i = 0;
+	int j = 0;
+
+	printf("\033[2J\033[H");
+
+	switch(player)
+	{
+		case 'a':
+		case 'A':
+		printf("Inserting a cell.\n");
+		printf("Enter a row (any positive int < 40):  ");
+		scanf("%d", &row);
+		if((row < 0) || (row > 40))
+		{
+			printf("Invalid input.");
+			return;
+		}	
+		printf("Enter a column (any positive int < 40):  ");
+		scanf("%d", &column);
+		if((column < 0) || (column > 40))
+		{
+			printf("Invalid input.");
+			return;
+		}
+		add_cell(future_board, row, column);
+		change_board(current_board, future_board);
+		print_board(current_board);		
+		break;
+
+		case 'r':
+		case 'R':
+		printf("Removing a cell.\n");
+		printf("Enter a row (any positive int < 40):  ");
+		scanf("%d", &row);
+		if((row < 0) || (row > 40))
+		{
+			printf("Invalid input.");
+			return;
+		}	
+		printf("Enter a column (any positive int < 40):  ");
+		scanf("%d", &column);
+		if((column < 0) || (column > 40))
+		{
+			printf("Invalid input.");
+			return;
+		}
+		delete_cell(future_board, row, column);
+		change_board(current_board, future_board);
+		print_board(current_board);				
+		break;
+
+		case 'n':
+		case 'N':
+		for(i = 0; i < BOARD_SIZE; i++)
+		{
+			for(j = 0; j < BOARD_SIZE; j++)
+			{
+				life_or_death(future_board, i, j, check_neighbors(future_board, i, j)); 
+			}
+		}
+		change_board(current_board, future_board);
+		print_board(current_board);
+		break;
+	}
+	return;
+}

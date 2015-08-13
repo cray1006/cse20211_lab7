@@ -1,0 +1,57 @@
+//life.c
+//This program of Conway's Game of Life.
+//Author:  Christopher Ray		//Date:  29 October 2013
+
+#include <stdio.h>
+#include "lifegame.h"
+
+int main(void)
+{
+	char current_board[BOARD_SIZE][BOARD_SIZE];
+	char future_board[BOARD_SIZE][BOARD_SIZE];
+	char player;
+
+	int i = 0;
+	int j = 0;
+
+	setup_board(current_board);
+	setup_board(future_board);
+
+	while(1)
+	{	
+		
+		printf("Press A to add a cell.\nPress R to remove a cell.\nPress N to advance the simulation.\nPress P to run the simulation forever.\nPress Q to quit the program.\n");
+		printf("Input:  ");
+		scanf("%c", &player);	
+		
+		switch(player)
+		{
+			case 'q':
+			case 'Q':
+			return 0;
+			break;
+	
+			case 'p':
+			case 'P':
+			while(1)
+			{
+				for(i = 0; i < BOARD_SIZE; i++)
+		{
+				for(j = 0; j < BOARD_SIZE; j++)
+				{
+					life_or_death(future_board, i, j, check_neighbors(future_board, i, j)); 
+				}
+		}
+		change_board(current_board, future_board);
+		print_board(current_board);	
+			}
+			break;			
+			
+			default:
+			printf("Invalid input.");
+			break;
+		}
+	}
+	
+	return 0;
+}

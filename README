@@ -1,0 +1,56 @@
+Christopher Ray
+Douglas Thain
+CSE 20211
+03 November 2013
+
+Lab 7 Report
+
+Compile Command:  gcc life.c lifegame.c -o life
+
+Execution Commands:
+
+./life.c < scene1.life
+
+./life.c < scene2.life
+
+./life.c < scene3.life
+
+./life.c < scene4.life
+
+./life.c < scene5.life
+
+	The final part of this assignment was to create a variety of cellular
+automata using the program "life.c" along with with files "scene1.life," 
+"scene2.life," etc.  All a user has to do is run the program using one of the 
+execution commands listed above and then watch the cellular automata do all 
+the work.  He or she is free to cancel the program at any time by pressing
+control-C.
+	Internally, "life.c" employs a series of from the files "lifegame.c" 
+and "lifegame.h."  The program first calls the function "setup_board" twice
+to create two boards:  one for display and scanning and one for making any 
+changes due to the rules of Life.  It then clears the screen and displays one
+of the boards.  The program then enters an infinite while loop where 
+the user is prompted to choose whether or not to add a cell, remove a cell, 
+advance the simulation by one interval, run the simulation forever, 
+or quit the program.  After the user has finished editing the board and 
+chooses to either advance the simulation or run it forever, the board 
+currently being displayed is run through a function while the rules of Life 
+are applied to the second board.  Once the rules are applied, the two boards
+are swapped and the updated board is displayed. 
+	The files "scene1.life," "scene2.life," etc. are input files 
+containing the various inputs for creating still life automata, "oscillators,"
+moving automata, an explosion, and a special scene.  
+	I verfied the output by first checking whether or not a user could 
+edit the board.  After successfully adding and removing a few cells, I checked
+to see if the program properly applied the rules of life by inputting a simple
+oscillator and advancing the simulation one step at a time.  Once I saw that
+"life.c" successfully applied the rules, I then ran program with the various
+input files to make sure that their output was consistent with the 
+requirements for this assignment.  Scene 1 does depict 5 examples of still 
+life.  Scene 2 does display 4 different oscillators.  Scene 3 does create
+four different moving automata, though one explodes once it hits the end of
+the board.  Scene 4 does create an explosion that eventually settles down 
+into several still life automata and oscillators.  And Scene 5 creates what
+appears to be a bomber crashing into a building resulting in a catastrophic 
+chain reaction that lasts for 2 minutes.  Overall, "life.c" does produce
+the correct output.
